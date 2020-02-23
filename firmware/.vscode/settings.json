@@ -1,0 +1,8 @@
+{
+	"cSpell.enabled": false,
+	"files.associations": {
+		"__locale": "cpp",
+		"bitset": "cpp",
+		"typeinfo": "cpp"
+	}
+}
