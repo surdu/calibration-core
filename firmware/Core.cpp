@@ -1,26 +1,31 @@
 #include "Core.h"
 
 
-
 Core::Core(AudioPlaySdWav* bkgTrack, AudioPlaySdWav* talkTrack) {
 	this->bkgTrack = bkgTrack;
 	this->talkTrack = talkTrack;
 
-	tracksCountMap = new SimpleMap<String, int>([](String &a, String &b) -> int {
-		if (a == b) {
-			return 0;
-		}
-		else if (a > b) {
-			return 1;
-		}
-		else {
-			return -1;
-		}
-	});
+	randomSeed(analogRead(2));
 };
 
 void Core::setName(char* coreName) {
 	this->coreName = coreName;
+
+	effectTracksCount = getTracksCount("effect");
+	talkTracksCount = getTracksCount("talk");
+	nagTracksCount = getTracksCount("nag");
+
+	nextTalkTrack = 1;
+
+	if (effectTracksCount > 0) {
+		effectsTrack = 1;
+		if (effectTracksCount > 1) {
+			effectsTrack = random(1, effectTracksCount + 1);
+		}
+	}
+	else {
+		effectsTrack = 0;
+	}
 }
 
 void Core::buildFilename(char* result, char* trackName, int trackNumber) {
@@ -59,15 +64,6 @@ bool Core::playTrack(char* trackName, int trackNumber) {
 }
 
 int Core::getTracksCount(char* trackName) {
-	char cacheKey[16] = "";
-	strcat(cacheKey, coreName);
-	strcat(cacheKey, trackName);
-
-	int cached = tracksCountMap->get(cacheKey);
-	if (cached) {
-		return cached;
-	}
-
 	int tracksCount = 1;
 
 	char filename[22] = "";
@@ -78,29 +74,12 @@ int Core::getTracksCount(char* trackName) {
 		buildFilename(filename, trackName, tracksCount);
 	}
 
-	tracksCountMap->put(cacheKey, tracksCount - 1);
-
-	Serial.print("Resolved: ");
-	Serial.println(tracksCount - 1);
-
 	return tracksCount - 1;
 }
 
 void Core::play() {
-	int effectTracksCount = getTracksCount("effect");
-	int talkTracksCount = getTracksCount("talk");
-	int nagTracksCount = getTracksCount("nag");
-
 	if (effectTracksCount > 0) {
-		bool startedTrack = playTrack("effect", nextEffectsTrack);
-		if (startedTrack) {
-			if (nextEffectsTrack < effectTracksCount) {
-				nextEffectsTrack++;
-			}
-			else {
-				nextEffectsTrack = 1;
-			}
-		}
+		playTrack("effect", effectsTrack);
 	}
 
 	bool startedTrack = playTrack("talk", nextTalkTrack);

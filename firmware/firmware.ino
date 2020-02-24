@@ -48,10 +48,10 @@ void setup() {
   delay(1000);
 
   core = new Core(&bkgTrack, &talkTrack);
+  core->setName("boring");
 }
 
 
 void loop() {
-  core->setName("boring");
   core->play();
 }

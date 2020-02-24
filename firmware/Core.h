@@ -4,8 +4,6 @@
 #include <Audio.h>
 #include <Arduino.h>
 
-#include "SimpleMap.h"
-
 class Core {
 	public:
 		char *coreName;
@@ -18,10 +16,13 @@ class Core {
 		void play();
 
 	private:
-		int nextEffectsTrack = 1;
-		int nextTalkTrack = 1;
+		int effectsTrack;
 
-		SimpleMap<String, int> *tracksCountMap;
+		int nextTalkTrack;
+
+		int effectTracksCount;
+		int talkTracksCount;
+		int nagTracksCount;
 
 		void buildFilename(char* result, char* trackName, int trackNumber);
 		int getTracksCount(char* trackName);
