@@ -3,29 +3,38 @@
 
 #include <Audio.h>
 #include <Arduino.h>
+#include "src/millisDelay.h"
 
 class Core {
 	public:
+		Core(AudioPlaySdWav* bkgTrack, AudioPlaySdWav* talkTrack);
+		void setName(char* coreName);
+		bool playTrack(char* trackName, unsigned char trackNumber);
+		void play();
+
+	private:
 		char *coreName;
 		AudioPlaySdWav* bkgTrack;
 		AudioPlaySdWav* talkTrack;
 
-		Core(AudioPlaySdWav* bkgTrack, AudioPlaySdWav* talkTrack);
-		void setName(char* coreName);
-		bool playTrack(char* trackName, int trackNumber);
-		void play();
+		unsigned char effectsTrack;
 
-	private:
-		int effectsTrack;
+		unsigned char nextTalkTrack;
+		unsigned char nextNagTrack;
 
-		int nextTalkTrack;
+		unsigned char currentTalkTrack;
+		unsigned char currentNagTrack;
 
-		int effectTracksCount;
-		int talkTracksCount;
-		int nagTracksCount;
+		unsigned char effectTracksCount;
+		unsigned char talkTracksCount;
+		unsigned char nagTracksCount;
 
-		void buildFilename(char* result, char* trackName, int trackNumber);
-		int getTracksCount(char* trackName);
+		millisDelay talkTimer;
+
+		void buildFilename(char* result, char* trackName, unsigned char trackNumber);
+		unsigned char getTracksCount(char* trackName);
+		void playNextTalkTrack();
+		void playNag();
 };
 
 #endif

@@ -9,7 +9,7 @@ void setup() {
   setupAudioSystem();
 
   core = new Core(&bkgTrack, &talkTrack);
-  core->setName("horror");
+  core->setName("boring");
 }
 
 
