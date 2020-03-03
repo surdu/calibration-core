@@ -10,7 +10,7 @@ class Core {
 		Core(AudioPlaySdWav* bkgTrack, AudioPlaySdWav* talkTrack);
 		void setName(char* coreName);
 		bool playTrack(char* trackName, unsigned char trackNumber);
-		void play();
+		void loop();
 
 	private:
 		char *coreName;

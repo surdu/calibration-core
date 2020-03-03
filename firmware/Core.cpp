@@ -1,7 +1,7 @@
 #include "Core.h"
 
 #define TALK_PAUSE 2000
-#define NAG_PAUSE 5000
+#define NAG_PAUSE 3000
 
 Core::Core(AudioPlaySdWav* bkgTrack, AudioPlaySdWav* talkTrack) {
 	this->bkgTrack = bkgTrack;
@@ -107,7 +107,7 @@ void Core::playNag() {
 	}
 }
 
-void Core::play() {
+void Core::loop() {
 	if (effectTracksCount > 0) {
 		playTrack("effect", effectsTrack);
 	}
