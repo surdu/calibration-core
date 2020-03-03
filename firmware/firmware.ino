@@ -5,7 +5,7 @@
 #define NUM_LEDS 64
 #define DATA_PIN 17
 
-#define LED_COUNT 64.0;
+#define LED_COUNT 64
 
 Core* core;
 
@@ -32,9 +32,9 @@ void loop() {
       fps = 0;
       int peakCount = peak.read() * LED_COUNT;
 
-      for (int f = 0; f <= 64; f++) {
+      for (int f = 0; f <= LED_COUNT; f++) {
         if (f < peakCount) {
-          leds[f].setRGB(10, 0, 0);
+          leds[f].setRGB(5, 0, 5);
         }
         else {
           leds[f] = CRGB::Black;
