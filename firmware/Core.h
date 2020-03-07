@@ -10,6 +10,11 @@ struct CoreDescription {
     int color;
 };
 
+enum State {
+	Talking,
+	Nagging
+};
+
 class Core {
 	public:
 		Core(AudioPlaySdWav* bkgTrack, AudioPlaySdWav* talkTrack);
@@ -23,12 +28,8 @@ class Core {
 		AudioPlaySdWav* talkTrack;
 
 		unsigned char effectsTrack;
-
-		unsigned char nextTalkTrack;
-		unsigned char nextNagTrack;
-
 		unsigned char currentTalkTrack;
-		unsigned char currentNagTrack;
+		State currentState;
 
 		unsigned char effectTracksCount;
 		unsigned char talkTracksCount;
@@ -38,8 +39,7 @@ class Core {
 
 		void buildFilename(char* result, char* trackName, unsigned char trackNumber);
 		unsigned char getTracksCount(char* trackName);
-		void playNextTalkTrack();
-		void playNag();
+		void Core::moveToNextTalkTrack();
 };
 
 #endif

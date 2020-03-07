@@ -17,11 +17,8 @@ void Core::setName(char* coreName) {
 	talkTracksCount = getTracksCount("talk");
 	nagTracksCount = getTracksCount("nag");
 
-	nextTalkTrack = 1;
-	nextNagTrack = 1;
-
 	currentTalkTrack = 1;
-	currentNagTrack = 1;
+	currentState = Talking;
 
 	if (effectTracksCount > 0) {
 		effectsTrack = 1;
@@ -83,27 +80,25 @@ unsigned char Core::getTracksCount(char* trackName) {
 	return tracksCount - 1;
 }
 
-void Core::playNextTalkTrack() {
-	bool startedTrack = playTrack("talk", nextTalkTrack);
-	if (startedTrack) {
-		if (nextTalkTrack < talkTracksCount) {
-			nextTalkTrack++;
-		}
-		else {
-			nextTalkTrack = 0;
-		}
-	}
-}
+void Core::moveToNextTalkTrack() {
+	unsigned char trackLimit;
 
-void Core::playNag() {
-		bool startedTrack = playTrack("nag", nextNagTrack);
-	if (startedTrack) {
-		if (nextNagTrack < nagTracksCount) {
-			nextNagTrack++;
-		}
-		else {
-			nextNagTrack = 1;
-		}
+	switch (currentState)
+	{
+		case Talking:
+			trackLimit = talkTracksCount;
+			break;
+		case Nagging:
+			trackLimit = nagTracksCount;
+			break;
+	}
+
+	if (currentTalkTrack < trackLimit) {
+		currentTalkTrack++;
+	}
+	else {
+		currentTalkTrack = 1;
+		currentState = Nagging;
 	}
 }
 
@@ -113,30 +108,33 @@ void Core::loop() {
 	}
 
 	if (!talkTrack->isPlaying()) {
-		if (currentTalkTrack != nextTalkTrack) {
-			currentTalkTrack = nextTalkTrack;
-			talkTimer.start(TALK_PAUSE);
+		char* talkTrack;
+		unsigned int pause;
+
+		switch (currentState)
+		{
+			case Talking:
+				talkTrack = "talk";
+				if (currentTalkTrack == 1) {
+					pause = 0;
+				}
+				else {
+					pause = TALK_PAUSE;
+				}
+				break;
+			case Nagging:
+				talkTrack = "nag";
+				pause = NAG_PAUSE;
+				break;
 		}
-		else if (!talkTimer.isRunning()) {
-			playNextTalkTrack();
+
+		if (!talkTimer.isRunning()) {
+			talkTimer.start(pause);
 		}
 
 		if (talkTimer.isFinished()) {
-			playNextTalkTrack();
-		}
-
-		if (nextTalkTrack == 0) {
-			if (currentNagTrack != nextNagTrack) {
-				currentNagTrack = nextNagTrack;
-				talkTimer.start(NAG_PAUSE);
-			}
-			else if (!talkTimer.isRunning()) {
-				playNag();
-			}
-
-			if (talkTimer.isFinished()) {
-				playNag();
-			}
+			playTrack(talkTrack, currentTalkTrack);
+			moveToNextTalkTrack();
 		}
 	}
 
