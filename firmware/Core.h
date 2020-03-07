@@ -5,6 +5,11 @@
 #include <Arduino.h>
 #include "src/millisDelay.h"
 
+struct CoreDescription {
+    char *name;
+    int color;
+};
+
 class Core {
 	public:
 		Core(AudioPlaySdWav* bkgTrack, AudioPlaySdWav* talkTrack);

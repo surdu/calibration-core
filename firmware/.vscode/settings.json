@@ -3,6 +3,7 @@
 	"files.associations": {
 		"__locale": "cpp",
 		"bitset": "cpp",
-		"typeinfo": "cpp"
+		"typeinfo": "cpp",
+		"algorithm": "cpp"
 	}
 }
