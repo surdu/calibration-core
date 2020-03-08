@@ -25,7 +25,7 @@ class Core {
 		CoreParams params;
 
 		Core(AudioPlaySdWav* bkgTrack, AudioPlaySdWav* talkTrack, AudioAnalyzePeak* peak, CRGB* leds);
-		void set(CoreParams desc);
+		void setup(CoreParams desc);
 		bool playTrack(char* trackName, unsigned char trackNumber);
 		virtual void drawLights(unsigned char peakCount);
 		void loop();

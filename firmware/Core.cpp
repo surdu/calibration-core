@@ -14,7 +14,7 @@ Core::Core(AudioPlaySdWav* bkgTrack, AudioPlaySdWav* talkTrack, AudioAnalyzePeak
 	randomSeed(analogRead(2));
 };
 
-void Core::set(CoreParams params) {
+void Core::setup(CoreParams params) {
 	this->params = params;
 
 	effectTracksCount = getTracksCount("effect");

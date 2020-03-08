@@ -18,7 +18,7 @@ void setup() {
   chosenCore = cores[random(0, coresCount)];
 
   core = new Core(&bkgTrack, &talkTrack, &peak, leds);
-  core->set(chosenCore);
+  core->setup(chosenCore);
 }
 
 void loop() {
