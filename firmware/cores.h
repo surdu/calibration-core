@@ -1,6 +1,6 @@
 #include "Core.h"
 
-CoreDescription cores[] = {
+CoreParams cores[] = {
   { .name = "auction",  .color = 0xB51E3F },
   { .name = "boring",   .color = 0x63BBD2 },
   { .name = "butter",   .color = 0xC5B700 },
@@ -35,4 +35,4 @@ CoreDescription cores[] = {
   { .name = "xecutive", .color = 0x06D00D }
 };
 
-size_t coresCount = sizeof(cores) / sizeof(CoreDescription);
+size_t coresCount = sizeof(cores) / sizeof(CoreParams);

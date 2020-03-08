@@ -1,10 +1,13 @@
 #include "audioSystem.h"
+
 #include "Core.h"
+#include "RhythmCore.h"
 
 #include "cores.h"
 
 Core* core;
 CoreParams chosenCore;
+CRGB leds[LED_COUNT];
 
 void setup() {
   Serial.begin(9600);
@@ -14,7 +17,7 @@ void setup() {
 
   chosenCore = cores[random(0, coresCount)];
 
-  core = new Core(&bkgTrack, &talkTrack, &peak);
+  core = new Core(&bkgTrack, &talkTrack, &peak, leds);
   core->set(chosenCore);
 }
 

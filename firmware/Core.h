@@ -21,14 +21,16 @@ enum State {
 
 class Core {
 	public:
-		Core(AudioPlaySdWav* bkgTrack, AudioPlaySdWav* talkTrack, AudioAnalyzePeak* peak);
+		CRGB* leds;
+		CoreParams params;
+
+		Core(AudioPlaySdWav* bkgTrack, AudioPlaySdWav* talkTrack, AudioAnalyzePeak* peak, CRGB* leds);
 		void set(CoreParams desc);
 		bool playTrack(char* trackName, unsigned char trackNumber);
+		virtual void drawLights(unsigned char peakCount);
 		void loop();
 
 	private:
-		CoreParams params;
-
 		AudioPlaySdWav* bkgTrack;
 		AudioPlaySdWav* talkTrack;
 		AudioAnalyzePeak* peak;
@@ -50,7 +52,6 @@ class Core {
 		void moveToNextTalkTrack();
 		void playBackgroundTrack();
 		void lightsLoop();
-		void drawLights(unsigned char peakCount);
 };
 
 #endif

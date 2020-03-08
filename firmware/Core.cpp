@@ -3,12 +3,11 @@
 #define TALK_PAUSE 2000
 #define NAG_PAUSE 3000
 
-CRGB leds[LED_COUNT];
-
-Core::Core(AudioPlaySdWav* bkgTrack, AudioPlaySdWav* talkTrack, AudioAnalyzePeak* peak) {
+Core::Core(AudioPlaySdWav* bkgTrack, AudioPlaySdWav* talkTrack, AudioAnalyzePeak* peak, CRGB* leds) {
 	this->bkgTrack = bkgTrack;
 	this->talkTrack = talkTrack;
 	this->peak = peak;
+	this->leds = leds;
 
 	FastLED.addLeds<WS2812B, LED_DATA_PIN, GRB>(leds, LED_COUNT);
 
@@ -105,9 +104,6 @@ void Core::moveToNextTalkTrack() {
 		currentTalkTrack = 1;
 		currentState = Nagging;
 	}
-
-	Serial.print("Next track: ");
-	Serial.println(currentTalkTrack);
 }
 
 void Core::playBackgroundTrack() {
