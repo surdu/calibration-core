@@ -3,15 +3,20 @@
 #define TALK_PAUSE 2000
 #define NAG_PAUSE 3000
 
-Core::Core(AudioPlaySdWav* bkgTrack, AudioPlaySdWav* talkTrack) {
+CRGB leds[LED_COUNT];
+
+Core::Core(AudioPlaySdWav* bkgTrack, AudioPlaySdWav* talkTrack, AudioAnalyzePeak* peak) {
 	this->bkgTrack = bkgTrack;
 	this->talkTrack = talkTrack;
+	this->peak = peak;
+
+	FastLED.addLeds<WS2812B, LED_DATA_PIN, GRB>(leds, LED_COUNT);
 
 	randomSeed(analogRead(2));
 };
 
-void Core::setName(char* coreName) {
-	this->coreName = coreName;
+void Core::set(CoreParams params) {
+	this->params = params;
 
 	effectTracksCount = getTracksCount("effect");
 	talkTracksCount = getTracksCount("talk");
@@ -33,7 +38,7 @@ void Core::setName(char* coreName) {
 
 void Core::buildFilename(char* result, char* trackName, unsigned char trackNumber) {
 	strcpy(result, "");
-	strcat(result, coreName);
+	strcat(result, params.name);
 	strcat(result, "/");
 	strcat(result, trackName);
 	strcat(result, "_");
@@ -100,21 +105,61 @@ void Core::moveToNextTalkTrack() {
 		currentTalkTrack = 1;
 		currentState = Nagging;
 	}
+
+	Serial.print("Next track: ");
+	Serial.println(currentTalkTrack);
 }
 
-void Core::loop() {
+void Core::playBackgroundTrack() {
 	if (effectTracksCount > 0) {
 		playTrack("effect", effectsTrack);
 	}
+}
+
+void Core::lightsLoop() {
+	if (fps > 24) {
+		if (peak->available()) {
+			fps = 0;
+
+			unsigned char peakCount = peak->read() * LED_COUNT;
+			if (peakCount % 2 != 0) {
+				peakCount += 1;
+			}
+
+			drawLights(peakCount);
+
+			FastLED.setBrightness(2);
+			FastLED.show();
+		}
+	}
+}
+
+void Core::drawLights(unsigned char peakCount) {
+	int leftLimit = (LED_COUNT / 2.0) - (peakCount / 2.0);
+	int rightLimit = (LED_COUNT / 2.0) + (peakCount / 2.0);
+
+	for (int f = 0; f <= LED_COUNT; f++) {
+		if (f > leftLimit && f < rightLimit) {
+			leds[f] = params.color;
+		}
+		else {
+			leds[f] = CRGB::Black;
+		}
+	}
+}
+
+void Core::loop() {
+	lightsLoop();
+	playBackgroundTrack();
 
 	if (!talkTrack->isPlaying()) {
-		char* talkTrack;
+		char* audioTrack;
 		unsigned int pause;
 
 		switch (currentState)
 		{
 			case Talking:
-				talkTrack = "talk";
+				audioTrack = "talk";
 				if (currentTalkTrack == 1) {
 					pause = 0;
 				}
@@ -123,7 +168,7 @@ void Core::loop() {
 				}
 				break;
 			case Nagging:
-				talkTrack = "nag";
+				audioTrack = "nag";
 				pause = NAG_PAUSE;
 				break;
 		}
@@ -133,7 +178,7 @@ void Core::loop() {
 		}
 
 		if (talkTimer.isFinished()) {
-			playTrack(talkTrack, currentTalkTrack);
+			playTrack(audioTrack, currentTalkTrack);
 			moveToNextTalkTrack();
 		}
 	}
