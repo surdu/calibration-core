@@ -23,15 +23,16 @@ class Core {
 	public:
 		CRGB* leds;
 		CoreParams params;
+		AudioPlaySdWav* bkgTrack;
 
 		Core(AudioPlaySdWav* bkgTrack, AudioPlaySdWav* talkTrack, AudioAnalyzePeak* peak, CRGB* leds);
 		void setup(CoreParams desc);
 		bool playTrack(char* trackName, unsigned char trackNumber);
 		virtual void drawLights(unsigned char peakCount);
+		virtual void playBackgroundTrack();
 		void loop();
 
 	private:
-		AudioPlaySdWav* bkgTrack;
 		AudioPlaySdWav* talkTrack;
 		AudioAnalyzePeak* peak;
 
@@ -50,7 +51,6 @@ class Core {
 		void buildFilename(char* result, char* trackName, unsigned char trackNumber);
 		unsigned char getTracksCount(char* trackName);
 		void moveToNextTalkTrack();
-		void playBackgroundTrack();
 		void lightsLoop();
 };
 

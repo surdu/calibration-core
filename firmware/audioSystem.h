@@ -7,16 +7,19 @@
 // GUItool: begin automatically generated code
 AudioPlaySdWav           bkgTrack;       //xy=250,116
 AudioPlaySdWav           talkTrack;      //xy=250,171
-AudioAnalyzePeak         peak;          //xy=474,218
 AudioMixer4              mixer1;         //xy=475,125
+AudioAnalyzePeak         talkPeak;          //xy=476,268
+AudioAnalyzePeak         effectsPeak;          //xy=484,211
 AudioOutputI2S           i2s1;           //xy=669,130
 AudioConnection          patchCord1(bkgTrack, 0, mixer1, 0);
-AudioConnection          patchCord2(talkTrack, 0, mixer1, 1);
-AudioConnection          patchCord3(talkTrack, 0, peak, 0);
-AudioConnection          patchCord4(mixer1, 0, i2s1, 0);
-AudioConnection          patchCord5(mixer1, 0, i2s1, 1);
-AudioControlSGTL5000     sgtl5000_1;     //xy=339,366
+AudioConnection          patchCord2(bkgTrack, 0, effectsPeak, 0);
+AudioConnection          patchCord3(talkTrack, 0, mixer1, 1);
+AudioConnection          patchCord4(talkTrack, 0, talkPeak, 0);
+AudioConnection          patchCord5(mixer1, 0, i2s1, 0);
+AudioConnection          patchCord6(mixer1, 0, i2s1, 1);
+AudioControlSGTL5000     sgtl5000_1;     //xy=678,210
 // GUItool: end automatically generated code
+
 
 
 void setupAudioSystem() {

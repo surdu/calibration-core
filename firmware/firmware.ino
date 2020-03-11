@@ -17,7 +17,13 @@ void setup() {
 
   chosenCore = cores[random(0, coresCount)];
 
-  core = new Core(&bkgTrack, &talkTrack, &peak, leds);
+  if (strcmp(chosenCore.name, "rhythm") == 0) {
+    core = new RhythmCore(&bkgTrack, &talkTrack, &effectsPeak, leds);
+  }
+  else {
+    core = new Core(&bkgTrack, &talkTrack, &talkPeak, leds);
+  }
+
   core->setup(chosenCore);
 }
 

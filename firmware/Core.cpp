@@ -52,11 +52,11 @@ bool Core::playTrack(char* trackName, unsigned char trackNumber) {
 
 	AudioPlaySdWav* track;
 
-	if (strcmp(trackName, "effect") == 0) {
-		track = bkgTrack;
+	if (strcmp(trackName, "talk") == 0 || strcmp(trackName, "nag") == 0) {
+		track = talkTrack;
 	}
 	else {
-		track = talkTrack;
+		track = bkgTrack;
 	}
 
 	if (!track->isPlaying()) {
