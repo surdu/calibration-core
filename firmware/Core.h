@@ -7,7 +7,7 @@
 #include "src/millisDelay.h"
 
 #define LED_COUNT 64
-#define LED_DATA_PIN 17
+#define LED_DATA_PIN 3
 
 struct CoreParams {
     char *name;

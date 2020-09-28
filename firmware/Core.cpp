@@ -10,6 +10,7 @@ Core::Core(AudioPlaySdWav* bkgTrack, AudioPlaySdWav* talkTrack, AudioAnalyzePeak
 	this->leds = leds;
 
 	FastLED.addLeds<WS2812B, LED_DATA_PIN, GRB>(leds, LED_COUNT);
+	FastLED.setBrightness(5);
 
 	randomSeed(analogRead(2));
 };
@@ -123,8 +124,6 @@ void Core::lightsLoop() {
 			}
 
 			drawLights(peakCount);
-
-			FastLED.setBrightness(2);
 			FastLED.show();
 		}
 	}

@@ -5,6 +5,8 @@
 
 #include "cores.h"
 
+#include "MPU.h"
+
 Core* core;
 CoreParams chosenCore;
 CRGB leds[LED_COUNT];
@@ -25,8 +27,10 @@ void setup() {
   }
 
   core->setup(chosenCore);
+  setupMPU();
 }
 
 void loop() {
   core->loop();
+  MPUloop();
 }
