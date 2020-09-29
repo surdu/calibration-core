@@ -1,14 +1,16 @@
 #include "MPU.h"
 
 volatile unsigned char _dataReady;
+void (*triggerCallback)(void);
 
 char _orientation[9] = { 1, 0, 0,
                          0, 1, 0,
                          0, 0, 1 };
 
-void setupMPU()
+void setupMPU(void (*cb)(void))
 {
-   Serial.begin(115200);
+    triggerCallback = cb;
+    Serial.begin(115200);
     Wire.begin();
     delay(500);
 
@@ -44,9 +46,7 @@ void MPUloop()
             }
 
             if (accel[VEC_Z] > 17000) {
-                Serial.print(accel[VEC_X]);Serial.print(";");
-                Serial.print(accel[VEC_Y]);Serial.print(";");
-                Serial.println(accel[VEC_Z]);
+                triggerCallback();
             }
         }
         else

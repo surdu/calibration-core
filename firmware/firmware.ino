@@ -27,7 +27,11 @@ void setup() {
   }
 
   core->setup(chosenCore);
-  setupMPU();
+  setupMPU(triggered);
+}
+
+void triggered() {
+  Serial.println("Triggered");
 }
 
 void loop() {

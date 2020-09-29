@@ -20,7 +20,7 @@
 #define MPU_HZ 20
 #define USE_DMP 0
 
-void setupMPU();
+void setupMPU(void (*cb)(void));
 void MPUloop();
 void InitMPU();
 
